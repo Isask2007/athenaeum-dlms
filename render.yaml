@@ -1,0 +1,21 @@
+# One-click deploy on Render: https://dashboard.render.com/blueprints
+# After pushing to GitHub, choose "New Blueprint Instance" and select this repo.
+services:
+  - type: web
+    name: athenaeum-dlms
+    runtime: node
+    plan: free
+    region: oregon
+    branch: main
+    buildCommand: npm install && npm run assets && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_DRIVER
+        value: sqlite
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES
+        value: 7d
