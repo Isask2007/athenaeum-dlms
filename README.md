@@ -43,7 +43,7 @@ The login page has one-click buttons for all three. Other seeded members use `Me
 - **Digital reader** — in-browser PDF.js rendering with zoom, page jump, keyboard arrows, page bookmarks, text-edition fallback and citation generator.
 - **Member dashboard** — overview cards (active borrows, due soon, reservations, pending fines), loans/digital shelf, saved items, reservations and purchase requests. Renew loans and pay fines online.
 - **Staff console** — analytics charts (fine collection, loan volume, subject breakdown, most borrowed/viewed), catalog CRUD with cover/PDF/EPUB uploads, circulation desk (issue, return, renew, extend, waive, approve/fulfill/cancel reservations), purchase requests, user management and an audit log.
-- **Access control** — JWT auth with `admin`, `librarian` and `member` roles; staff-only and admin-only routes enforced on both client and server.
+- **Access control** — JWT auth with `admin`, `librarian` and `member` roles; staff-only and admin-only routes enforced on both client and server. The sign-up form includes an **Account type** selector so visitors can create any of the three roles directly (defaults to `member`).
 - **Design** — warm paper / deep navy academic palette, dark mode with persistence, skeleton loaders, toast notifications, responsive mobile layouts.
 
 ## Configuration
@@ -90,7 +90,7 @@ All endpoints are prefixed with `/api`. Authenticated requests use `Authorizatio
 ### Auth — `/api/auth`
 | Method | Path | Access | Description |
 | --- | --- | --- | --- |
-| POST | `/register` | public | Create a member account |
+| POST | `/register` | public | Create an account; optional `role` = `member` / `librarian` / `admin` (default `member`) |
 | POST | `/login` | public | Sign in, returns `{ user, token }` |
 | GET | `/me` | auth | Current user |
 | POST | `/logout` | public | Stateless logout acknowledgement |
@@ -185,6 +185,7 @@ The repo includes a `render.yaml` blueprint, so deployment takes a few clicks:
 
 ## Notes
 
+- **Security:** open registration intentionally allows visitors to choose `librarian` or `admin` for demo convenience. Before using this with real data, remove those options (or gate them with an invite code) in `src/pages/LoginPage.jsx` and restrict the `role` values accepted by `POST /api/auth/register`.
 - Uploaded covers and PDFs/EPUBs are written to `server/storage/` and served under `/storage/`.
 - Seeded digital files live in `public/digital/` and are served at `/digital/`.
 - If the database or assets are missing, run `npm run assets && npm run seed` — both are safe to re-run.

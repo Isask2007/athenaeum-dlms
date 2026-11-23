@@ -12,7 +12,7 @@ export default function LoginPage() {
   const { login, register } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: '', password: '', name: '', department: 'Computer Science' });
+  const [form, setForm] = useState({ email: '', password: '', name: '', role: 'member', department: 'Computer Science' });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -28,7 +28,7 @@ export default function LoginPage() {
     setLoading(true); setError('');
     try {
       const user = registerMode
-        ? await register({ name: form.name, email: form.email, password: form.password, department: form.department })
+        ? await register({ name: form.name, email: form.email, password: form.password, role: form.role, department: form.department })
         : await login(form.email, form.password);
       finish(user);
     } catch (err) { setError(err.message); }
@@ -71,6 +71,14 @@ export default function LoginPage() {
 
           <form onSubmit={submit} className="mt-7 space-y-4">
             {registerMode && <Field label="Full name"><div className="relative"><UserRound size={16} className="absolute left-3 top-3 text-ink-400" /><Input className="pl-9" value={form.name} onChange={set('name')} placeholder="Your full name" required /></div></Field>}
+            {registerMode && <Field label="Account type">
+              <Select value={form.role} onChange={set('role')}>
+                <option value="member">Member — borrow, reserve and read</option>
+                <option value="librarian">Librarian — manage catalog and circulation</option>
+                <option value="admin">Administrator — full system access</option>
+              </Select>
+              <p className="mt-1.5 text-[11px] text-ink-500">Choose the workspace you'll see after signing in.</p>
+            </Field>}
             <Field label="Email address"><div className="relative"><Mail size={16} className="absolute left-3 top-3 text-ink-400" /><Input className="pl-9" type="email" value={form.email} onChange={set('email')} placeholder="you@university.edu" required /></div></Field>
             <Field label="Password"><div className="relative"><LockKeyhole size={16} className="absolute left-3 top-3 text-ink-400" /><Input className="px-9" type={showPassword ? 'text' : 'password'} value={form.password} onChange={set('password')} placeholder="At least 8 characters" required />
               <button type="button" onClick={() => setShowPassword((v) => !v)} className="absolute right-3 top-3 text-ink-400">{showPassword ? <EyeOff size={16} /> : <Eye size={16} />}</button></div></Field>
