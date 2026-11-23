@@ -181,7 +181,7 @@ The repo includes a `render.yaml` blueprint, so deployment takes a few clicks:
 3. Render reads `render.yaml`, runs `npm install --include=dev && npm run assets && npm run build`, and starts with `npm start`.
 4. Your public URL will be `https://athenaeum-dlms.onrender.com` (shown in the Render dashboard).
 
-`JWT_SECRET` is generated automatically by Render. The database auto-seeds itself on first boot, so demo accounts work immediately. The free plan sleeps after inactivity; the first request after a nap may take a few seconds. Uploaded files live on the instance's local disk and reset on redeploy — fine for the demo seed data, but use MySQL plus a persistent disk for long-term uploads.
+`JWT_SECRET` is generated automatically by Render. The database auto-seeds itself on first boot, so demo accounts work immediately. The free plan sleeps after inactivity; `.github/workflows/keepalive.yml` pings the health endpoint every 10 minutes to keep the app warm (you can also trigger it manually from the Actions tab). Uploaded files live on the instance's local disk and reset on redeploy — fine for the demo seed data, but use MySQL plus a persistent disk for long-term uploads.
 
 ## Notes
 
