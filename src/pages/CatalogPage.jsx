@@ -30,7 +30,7 @@ export default function CatalogPage() {
   const clear = () => { setFilters(EMPTY); setParams({}, { replace: true }); };
   const changeView = (next) => { setView(next); localStorage.setItem('dlms_catalog_view', next); };
 
-  const { data, loading, error } = useApi(`/catalog?${queryString || 'limit=12'}&limit=12`);
+  const { data, loading, error } = useApi(`/catalog?${queryString ? `${queryString}&` : ''}limit=12`);
   const { data: facets } = useApi('/catalog/facets');
 
   return (
